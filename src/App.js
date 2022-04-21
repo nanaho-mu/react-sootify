@@ -27,10 +27,12 @@ function App() {
   const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
   const [lyrics, setLyrics] = useState("")
-  // console.log(searchResults)
-  // const [trackIds, setTrackIds]=useState([])
-  // const [features, setFeatures]=useState({})
-  // https://example.com/#aaa という URL でサイトにアクセスした場合に、後ろの #aaa の部分を取得するには、 location.hash を参照します。 この値には、先頭の # が含まれるため、# を除いた文字列を取得したい場合は substring を合わせて使用します。
+  const [featureResults, setFeatureResults]=useState([])
+  const [audioF, setAudioF]=useState([])
+  const [ids, setIds]=useState()
+  const [audioFeature, setAudioFeature]=useState()
+
+
   function chooseTrack(track) {
     setPlayingTrack(track)
     setSearch("")
@@ -54,20 +56,7 @@ function App() {
     spotifyApi.setAccessToken(token)
   }, [token])
 
-  // useEffect(() => {
-  //   if (!playingTrack) return
 
-  //   axios
-  //     .get("http://localhost:3001/lyrics", {
-  //       params: {
-  //         track: playingTrack.title,
-  //         artist: playingTrack.artist,
-  //       },
-  //     })
-  //     .then(res => {
-  //       setLyrics(res.data.lyrics)
-  //     })
-  // }, [playingTrack])
 
   useEffect(() => {
     if (!search) return setSearchResults([])
@@ -87,28 +76,14 @@ function App() {
             track.album.images[0]
           )
           
-          async function audioFeature(){
-            const data=await spotifyApi.getAudioFeaturesForTrack(track.id)
-            const json=data.json();
-            return json
-            console.log(json)
-          }
-            audioFeature()
-          //   then(function(resolve,reject){
-          //   // console.log(data.body.danceability);
-          //   let resolve1=resolve
-          //   return resolve1
-          // }, function(err) {
-          //   console.log(err);
-          // });
-          // console.log(audioFeature)
+        
           return {
             artist: track.artists[0].name,
             title: track.name,
             id: track.id,
             uri: track.uri,
             albumUrl: smallestAlbumImage.url,
-            feature: audioFeature
+
           }
         })
       )
@@ -116,8 +91,47 @@ function App() {
 
     return () => (cancel = true)
   }, [search, token])
-  console.log(searchResults)
+  // console.log(searchResults)
+  useEffect(()=>{
+    setIds(searchResults.map(track=>{
+      return track.id}
+      ))
+    
+  },[searchResults])
+  console.log(ids)
 
+
+  useEffect(() => {
+    // if (!search) return setSearchResults([])
+    if (!token) return
+
+    let cancel = false
+    // console.log(searchResults.id)
+    setAudioFeature(ids.map((id)=>spotifyApi.getAudioFeaturesForTrack(id).then(res => {
+      // console.log(res.body.danceability)
+      return res.body.danceability})))
+  //     if (cancel) return
+  //     console.log(res.body)
+  //     setAudioF(
+  //       res.body
+  // )}))
+    // console.log(audioF)
+  //   audioF.then(res => {
+  //     console.log(res.body)
+  //     // return res.body
+      // if (cancel) return
+      // setFeatureResults(
+      //       {danceability: res.body.danceability,
+      //       energy: res.body.energy}
+          
+        // )
+      // )
+    
+    
+    // return () => (cancel = true)
+  }, [ids])
+  console.log(audioFeature)
+  
 
 
   const logout = () => {
