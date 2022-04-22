@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
+
 const spotifyApi = new SpotifyWebApi({
   clientId: "ef95ae2b24034ef6b63c47e5317c0345",
 })
@@ -31,6 +32,8 @@ function App() {
   const [audioF, setAudioF]=useState([])
   const [ids, setIds]=useState()
   const [audioFeature, setAudioFeature]=useState()
+  const [similarTrack,setSimilarTrack]=useState([])
+  const [audios, setAudios]=useState([])
 
 
   function chooseTrack(track) {
@@ -83,6 +86,7 @@ function App() {
             id: track.id,
             uri: track.uri,
             albumUrl: smallestAlbumImage.url,
+            preview_url: track.preview_url
 
           }
         })
@@ -96,20 +100,51 @@ function App() {
     setIds(searchResults.map(track=>{
       return track.id}
       ))
+      const featuresResponse=async (e)=>{
+        e.preventDefault()
+        const featuresParams = new URLSearchParams();
+        featuresParams.append('ids', searchResults.map((track => track.id)).join(','));
+        const {data}=await axios.get(`https://api.spotify.com/v1/audio-features?${featuresParams.toString()}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+        }
+        })
+        const audioFeatures = data.audio_features;
+        // console.log(data)
+        setAudios(audioFeatures)
+        // setTrackIds(data.tracks.items.map((track)=>track.id))
+    
+      }
     
   },[searchResults])
-  console.log(ids)
+  // console.log(ids)
+  console.log(audios)
+  
+  // console.log(featuresResponse())
 
 
-  useEffect(() => {
-    // if (!search) return setSearchResults([])
-    if (!token) return
 
-    let cancel = false
-    // console.log(searchResults.id)
-    setAudioFeature(ids.map((id)=>spotifyApi.getAudioFeaturesForTrack(id).then(res => {
-      // console.log(res.body.danceability)
-      return res.body.danceability})))
+
+//   const featuresResponse =axios.get(
+//     `https://api.spotify.com/v1/audio-features/${ids}`,
+//     {
+//         headers: {
+//             'Content-Type': 'application/x-www-form-urlencoded',
+//             'Authorization': `Bearer ${token}`
+//         }
+//     }
+// );
+// const audioFeatures = featuresResponse.data.audio_features;
+
+  // useEffect(() => {
+  //   // if (!search) return setSearchResults([])
+  //   if (!token) return
+
+  //   let cancel = false
+  //   // console.log(searchResults.id)
+  //   setAudioFeature(ids.map((id)=>axios.spotifyApi.getAudioFeaturesForTrack(id).then(res => {
+  //     // console.log(res.body.danceability)
+  //     return res.body.danceability})))
   //     if (cancel) return
   //     console.log(res.body)
   //     setAudioF(
@@ -129,10 +164,32 @@ function App() {
     
     
     // return () => (cancel = true)
-  }, [ids])
-  console.log(audioFeature)
+  // }, [ids])
+  // console.log(audioFeature)
   
-
+  useEffect(() => {
+    /* 似ている曲を取得 START */
+    axios(`https://api.spotify.com/v1/recommendations?limit=10&market=US`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      params: {
+        seed_tracks: tracks,
+        target_danceability: tracks.danceability,
+        target_energy: tracks.energy,
+        
+      },
+    })
+      .then((similarReaponse) => {
+        setSimilarTrack(similarReaponse.data.tracks);
+      })
+      .catch((err) => {
+        console.log("err:", err);
+      });
+    /* 似ている曲を取得 END */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const logout = () => {
     setToken("")
@@ -149,14 +206,20 @@ function App() {
         type:"track"
     }
     })
-    console.log(data.tracks.items[0])
+    // console.log(data.tracks.items[0])
     setTracks(data.tracks.items)
     // setTrackIds(data.tracks.items.map((track)=>track.id))
 
   }
 
   // console.log(playingTrack)
-  
+  const renderFeatures=()=>{
+    return audios.map((audio,index)=>(
+      <div key={index}>
+        {audio.danceability}
+      </div>
+    ))
+  }
   // const renderArtists=()=>{
   //   return tracks.map(track=>(
   //     <div key={track.id}>
@@ -195,10 +258,11 @@ function App() {
             chooseTrack={chooseTrack}
           />
         ))}
+
         </div>
-        <div><Player token={token} trackUri={playingTrack?.uri}/></div>
+
       </Container>
-      {/* {renderArtists()} */}
+      {renderFeatures()}
       {/* {searchAudioFeature()} */}
       </header>
     </div>

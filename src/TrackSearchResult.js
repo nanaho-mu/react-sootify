@@ -1,4 +1,5 @@
 import React from "react"
+import ReactAudioPlayer from "react-audio-player"
 
 export const TrackSearchResult =({ track, chooseTrack })=>{
   function handlePlay() {
@@ -14,6 +15,13 @@ export const TrackSearchResult =({ track, chooseTrack })=>{
       <div className="ml-3">
         <div>{track.title}</div>
         <div className="text-muted　text-black-50">{track.artist}</div>
+        {track.preview_url
+          ?<ReactAudioPlayer
+          src={track.preview_url}
+          controls
+          />
+          :<p>No preview music</p>
+        }
         {/* <div>{track.feature}</div> */}
       </div>
     </div>

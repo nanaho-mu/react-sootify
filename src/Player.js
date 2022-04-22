@@ -18,10 +18,13 @@
 //       // uris={trackUri ? [trackUri] : []}
       
 //     />
+// //   )
+// // }
+// export const Player=(props)=>{
+  
+//   return (
+//     <div>
+      
+//     </div>
 //   )
 // }
-export const Player=()=>{
-  return (
-    <div>player</div>
-  )
-}
