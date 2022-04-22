@@ -10,14 +10,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import {recommendedTracks} from "./Recommend"
 
 
-
+require('dotenv').config()
 const spotifyApi = new SpotifyWebApi({
   clientId: "ef95ae2b24034ef6b63c47e5317c0345",
 })
 
 function App() {
-  const CLIENT_ID="ef95ae2b24034ef6b63c47e5317c0345"
-  const REDIRECT_URI="http://localhost:3000"
+  const CLIENT_ID=process.env.CLIENT_ID
+  const REDIRECT_URI=process.env.REDIRECT_URI
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
   const RESPONSE_TYPE = "token"
 
