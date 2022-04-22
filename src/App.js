@@ -9,8 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // import {recommendedTracks} from "./Recommend"
 
-
-require('dotenv').config()
 const spotifyApi = new SpotifyWebApi({
   clientId: "ef95ae2b24034ef6b63c47e5317c0345",
 })
