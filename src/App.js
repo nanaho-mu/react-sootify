@@ -19,6 +19,7 @@ function App() {
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
   const RESPONSE_TYPE = "token"
   console.log(CLIENT_ID)
+  console.log(REDIRECT_URI)
 
   const [token, setToken]=useState("")
   const [search, setSearch]=useState("")
