@@ -168,7 +168,7 @@ function App() {
       {token?
       <form onSubmit={searchArtists}>
         {/* <input type="text" onChange={(e)=>setSearchKey(e.target.value)}/> */}
-        <button type={"submit"} >Search</button>
+        {/* <button type={"submit"} >Search</button> */}
       </form>
       :<h2>Please login</h2>}
       <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
