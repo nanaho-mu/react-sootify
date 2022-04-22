@@ -87,14 +87,14 @@ function App() {
             track.album.images[0]
           )
           
-          async function audioFeature(){
-            const data=await spotifyApi.getAudioFeaturesForTrack(track.id)
-            const json=data.json();
-            return json
-            console.log(json)
-          }
-            audioFeature()
-          //   then(function(resolve,reject){
+          // async function audioFeature(){
+          //   const data=await spotifyApi.getAudioFeaturesForTrack(track.id)
+          //   const json=data.json();
+          //   return json
+          //   console.log(json)
+          // }
+          //   audioFeature()
+          // //   then(function(resolve,reject){
           //   // console.log(data.body.danceability);
           //   let resolve1=resolve
           //   return resolve1
@@ -108,7 +108,7 @@ function App() {
             id: track.id,
             uri: track.uri,
             albumUrl: smallestAlbumImage.url,
-            feature: audioFeature
+            preview_url: track.preview_url
           }
         })
       )
@@ -182,7 +182,6 @@ function App() {
           />
         ))}
         </div>
-        <div><Player token={token} trackUri={playingTrack?.uri}/></div>
       </Container>
       {/* {renderArtists()} */}
       {/* {searchAudioFeature()} */}
