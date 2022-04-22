@@ -18,7 +18,7 @@ const spotifyApi = new SpotifyWebApi({
 
 function App() {
   const CLIENT_ID="ef95ae2b24034ef6b63c47e5317c0345"
-  const REDIRECT_URI="http://localhost:3000"
+  const REDIRECT_URI="htttps://automisce.unronritaro.net"
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
   const RESPONSE_TYPE = "token"
 
