@@ -27,10 +27,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
   const [lyrics, setLyrics] = useState("")
-  // console.log(searchResults)
-  // const [trackIds, setTrackIds]=useState([])
-  // const [features, setFeatures]=useState({})
-  // https://example.com/#aaa という URL でサイトにアクセスした場合に、後ろの #aaa の部分を取得するには、 location.hash を参照します。 この値には、先頭の # が含まれるため、# を除いた文字列を取得したい場合は substring を合わせて使用します。
+  
   function chooseTrack(track) {
     setPlayingTrack(track)
     setSearch("")
@@ -38,7 +35,7 @@ function App() {
   }
   useEffect(()=>{
     const hash=window.location.hash
-    // localStorageからデータを取得する,取得したいデータのkeyを指定して取り出せる
+    
     let token=window.localStorage.getItem("token")
 
     if (!token&&hash){
@@ -54,20 +51,7 @@ function App() {
     spotifyApi.setAccessToken(token)
   }, [token])
 
-  // useEffect(() => {
-  //   if (!playingTrack) return
-
-  //   axios
-  //     .get("http://localhost:3001/lyrics", {
-  //       params: {
-  //         track: playingTrack.title,
-  //         artist: playingTrack.artist,
-  //       },
-  //     })
-  //     .then(res => {
-  //       setLyrics(res.data.lyrics)
-  //     })
-  // }, [playingTrack])
+  
 
   useEffect(() => {
     if (!search) return setSearchResults([])
@@ -86,22 +70,7 @@ function App() {
             },
             track.album.images[0]
           )
-          
-          // async function audioFeature(){
-          //   const data=await spotifyApi.getAudioFeaturesForTrack(track.id)
-          //   const json=data.json();
-          //   return json
-          //   console.log(json)
-          // }
-          //   audioFeature()
-          // //   then(function(resolve,reject){
-          //   // console.log(data.body.danceability);
-          //   let resolve1=resolve
-          //   return resolve1
-          // }, function(err) {
-          //   console.log(err);
-          // });
-          // console.log(audioFeature)
+
           return {
             artist: track.artists[0].name,
             title: track.name,
@@ -137,26 +106,12 @@ function App() {
     })
     console.log(data.tracks.items[0])
     setTracks(data.tracks.items)
-    // setTrackIds(data.tracks.items.map((track)=>track.id))
+
 
   }
 
-  // console.log(playingTrack)
-  
-  // const renderArtists=()=>{
-  //   return tracks.map(track=>(
-  //     <div key={track.id}>
-  //       {/* {artist.images.length ? <img width={"100%"} src={artist.images[0].url} alt=""/> : <div>No Image</div>} */}
-  //       {track.name}
-  //       {track.id}
-  //     </div>
-  //   ))
-  // }
-  // const audio_features=()=>{
-  //   return (
-      
-  //   )
-  // }
+
+
   return (
     <div className="App">
       <header className="App-header">
@@ -167,8 +122,6 @@ function App() {
       
       {token?
       <form onSubmit={searchArtists}>
-        {/* <input type="text" onChange={(e)=>setSearchKey(e.target.value)}/> */}
-        {/* <button type={"submit"} >Search</button> */}
       </form>
       :<h2>Please login</h2>}
       <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
@@ -183,8 +136,6 @@ function App() {
         ))}
         </div>
       </Container>
-      {/* {renderArtists()} */}
-      {/* {searchAudioFeature()} */}
       </header>
     </div>
   );
